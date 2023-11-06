@@ -16,6 +16,8 @@ public class RelativeMovement : MonoBehaviour
     public float gravity = -9.8f;
     public float terminalVelocity = -10.0f;
     public float minFall = -1.5f;
+    
+    private Animator
 
     private float _vertSpeed;
     private void Start()
