@@ -28,9 +28,10 @@ public class Manager : MonoBehaviour
 
     private IEnumerator StartupManagers()
     {
+        NetworkService network = new NetworkService();
         foreach (var manager in _startSequence)
         {
-            manager.Startup();
+            manager.Startup(network);
         }
 
         yield return null;

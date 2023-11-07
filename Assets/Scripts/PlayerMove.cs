@@ -19,9 +19,16 @@ public class PlayerMove : MonoBehaviour
     void LateUpdate()
     {
         float horInput = Input.GetAxis("Horizontal");
-        if (horInput != 0) {
+        if (horInput != 0)
+        {
             _rotY += horInput * rotSpeed;
-        }else
+        }
+        // else
+        // {
+        //     _rotY += Input.GetAxis("Mouse X") * rotSpeed * 3;     
+        // }
+        float mouseHorInput = Input.GetAxis("Mouse X");
+        if(mouseHorInput != 0)
         {
             _rotY += Input.GetAxis("Mouse X") * rotSpeed * 3;     
         }
