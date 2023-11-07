@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,8 @@ public class RelativeMovement : MonoBehaviour
     public float gravity = -9.8f;
     public float terminalVelocity = -10.0f;
     public float minFall = -1.5f;
+    
+    public float pushForce = 15.0f;
 
     private Animator _animator;
     private ControllerColliderHit _contact;
@@ -103,5 +106,13 @@ public class RelativeMovement : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
+
+        Rigidbody body = hit.collider.attachedRigidbody;
+        if (body != null && !body.isKinematic)
+        {
+            body.velocity = hit.moveDirection * pushForce;
+            Debug.Log("HIT YOU ");
+        } 
     }
+    
 }
