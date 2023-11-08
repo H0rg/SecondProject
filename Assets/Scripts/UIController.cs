@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class UIController : MonoBehaviour
+{
+    [SerializeField] private Text healthLabel;
+    [SerializeField] private InventoryPopup popup;
+
+    private void Awake()
+    {
+        Messenger.AddListener(GameEvent.HEALTH_UPDATED, OnHealthUpdated);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger.RemoveListener(GameEvent.HEALTH_UPDATED, OnHealthUpdated);
+    }
+
+    void Start()
+    {
+        OnHealthUpdated();
+
+        popup.gameObject.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            bool isShowing = popup.gameObject.activeSelf;
+           popup.gameObject.SetActive(!isShowing);
+            popup.Refresh();
+        }
+    }
+
+    private void OnHealthUpdated()
+    {
+        string message = $"Health: {Manager.Player.health}/{Manager.Player.maxHealth}";
+        healthLabel.text = message;
+    }
+}
