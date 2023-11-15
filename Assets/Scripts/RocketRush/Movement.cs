@@ -6,15 +6,22 @@ using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float rotationThrust = 70f;
     [SerializeField] private float mainThrust = 1000f;
-    private float zRotate = 1;
+    
+    [Header("AudioClips")]
+    [SerializeField] private AudioClip _thrustClip;
+    
     private Rigidbody _rigidbody;
     private AudioSource _audioSource;
+    
     private bool thrusting;
+    private float zRotate = 1;
 
     private void Start()
     {
+        Debug.Log("Respawn");
         _audioSource = GetComponent<AudioSource>();
         _rigidbody = GetComponent<Rigidbody>();
     }
@@ -33,7 +40,6 @@ public class Movement : MonoBehaviour
             thrusting = true;
             _rigidbody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
         }
-
         else
         {
             thrusting = false;
@@ -44,8 +50,8 @@ public class Movement : MonoBehaviour
     {
         if (thrusting)
         {
-            if(!_audioSource.isPlaying)
-                _audioSource.Play();
+            if (!_audioSource.isPlaying)
+                _audioSource.PlayOneShot(_thrustClip);
         }
         else
         {
@@ -53,13 +59,13 @@ public class Movement : MonoBehaviour
         }
 
     }
+
     void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A))
         {
             ApplyRotation(rotationThrust);
         }
-
         if (Input.GetKey(KeyCode.D))
         {
             ApplyRotation(-rotationThrust);
@@ -72,4 +78,5 @@ public class Movement : MonoBehaviour
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime);
         _rigidbody.freezeRotation = false;
     }
+
 }
