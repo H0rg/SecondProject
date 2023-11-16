@@ -11,7 +11,10 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float finishDuration = 2f;
     [SerializeField] private AudioClip _successClip;
     [SerializeField] private AudioClip _crushClip;
-    
+    [SerializeField] private AudioClip _finishGameClip;
+    [SerializeField] private ParticleSystem _successParticles;
+    [SerializeField] private ParticleSystem _crushParticles;
+
     private Movement _movement;
     private AudioSource _audio;
     private Rigidbody _rigidbody;
@@ -23,6 +26,24 @@ public class CollisionHandler : MonoBehaviour
         _movement = GetComponent<Movement>();
         _audio = GetComponent<AudioSource>();
         _rigidbody = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        DebugTools();
+    }
+
+    private void DebugTools()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isAlive = !isAlive;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
@@ -45,33 +66,34 @@ public class CollisionHandler : MonoBehaviour
 
     void StartCrashSequence()
     {
+        StopMovementParticles();
+        _crushParticles.Play();
         isAlive = false;
         _movement.enabled = false;
         _audio.Stop();
         _audio.PlayOneShot(_crushClip);
-        Invoke("ReloadLevel",deathDuration);
+        Invoke("ReloadLevel", deathDuration);
     }
 
     void StartSuccessSequence()
     {
-        _movement.enabled = false;
-        _rigidbody.useGravity = false;
-        _rigidbody.freezeRotation = true;
-        _rigidbody.velocity = Vector3.zero;
+        StopMovementParticles();
+        _successParticles.Play();
+        FrezzeMovementAndRotation();
         _audio.Stop();
         _audio.PlayOneShot(_successClip);
-        Invoke("LoadNextLevel",finishDuration);
+        Invoke("LoadNextLevel", finishDuration);
     }
 
     private void LoadNextLevel()
     {
         int allScene = SceneManager.sceneCountInBuildSettings;
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        
-        Debug.Log($"You finish level {currentSceneIndex + 1}");
+
+        print($"You finish level {currentSceneIndex + 1}");
         if (currentSceneIndex == allScene - 1)
         {
-            Debug.Log("You finish The Game)");
+            print("You finish The Game)");
             currentSceneIndex = 0;
             SceneManager.LoadScene(currentSceneIndex);
         }
@@ -85,5 +107,20 @@ public class CollisionHandler : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
+    }
+
+    private void FrezzeMovementAndRotation()
+    {
+        _movement.enabled = false;
+        _rigidbody.useGravity = false;
+        _rigidbody.freezeRotation = true;
+        _rigidbody.velocity = Vector3.zero;
+    }
+
+    private void StopMovementParticles()
+    {
+        _movement._mainBusterParticles.Stop();
+        _movement._leftBusterParticle.Stop();
+        _movement._rightBusterParticle.Stop();
     }
 }
