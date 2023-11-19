@@ -22,7 +22,6 @@ public class Movement : MonoBehaviour
     private AudioSource _audioSource;
     
     private bool thrusting;
-    private float zRotate = 1;
 
     private void Start()
     {

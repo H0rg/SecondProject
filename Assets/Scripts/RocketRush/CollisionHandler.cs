@@ -28,24 +28,6 @@ public class CollisionHandler : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    private void Update()
-    {
-        DebugTools();
-    }
-
-    private void DebugTools()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadNextLevel();
-        }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            isAlive = !isAlive;
-        }
-    }
-
     private void OnCollisionEnter(Collision other)
     {
         if (isAlive)
@@ -90,12 +72,10 @@ public class CollisionHandler : MonoBehaviour
         int allScene = SceneManager.sceneCountInBuildSettings;
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        print($"You finish level {currentSceneIndex + 1}");
         if (currentSceneIndex == allScene - 1)
         {
             print("You finish The Game)");
-            currentSceneIndex = 0;
-            SceneManager.LoadScene(currentSceneIndex);
+            SceneManager.LoadScene("End");
         }
         else
         {

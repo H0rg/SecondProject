@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class NewDropper : MonoBehaviour
 {
-    private float time = 0f;
-    [SerializeField] private float timeToWait = 3f;
     private Rigidbody _rigidbody;
     private MeshRenderer _meshRenderer;
     private void Start()
